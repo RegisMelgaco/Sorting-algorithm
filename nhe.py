@@ -32,28 +32,47 @@ def swap(array, n1, n2):
     array[n1] = array[n2]
     array[n2] = temp
 
-def insertion_sort(array):
-    less = []
-    equal = []
-    greater = []
-    if len(array) > 1:
-        pivot = array[0]
-        for x in array:
-            if x < pivot:
-                less.append(x)
-            if x == pivot:
-                equal.append(x)
-            if x > pivot:
-                greater.append(x)
-        return insertion_sort(less) + equal + insertion_sort(greater)
-    else:
-        return array
+def mergeSort(ul):
+    if len(ul) > 1:
+        mid = len(ul) // 2
 
-size = [10, 200, 400, 600, 800, 1000]
+        left_ul = ul[:mid]
+        right_ul = ul[mid:]
+
+        mergeSort(left_ul)
+        mergeSort(right_ul)
+
+        i = 0
+        j = 0
+        k = 0
+
+        while i < len(left_ul) and j < len(right_ul):
+
+            if left_ul[i] < right_ul[j]:
+                ul[k]=left_ul[i]
+                i += 1
+            else:
+                ul[k]=right_ul[j]
+                j += 1
+            k += 1
+
+        while i < len(left_ul):
+
+            ul[k]=left_ul[i]
+            i += 1
+            k += 1
+
+        while j < len(right_ul):
+            ul[k]=right_ul[j]
+            j += 1
+            k += 1
+    return ul
+
+size = [1000, 20000, 40000, 60000, 80000, 100000]
 time = []
 
 for s in size:
-    time.append(timeit.timeit("insertion_sort({})".format(generate_decreasing_list(s)), setup="from __main__ import insertion_sort", number=1))
+    time.append(timeit.timeit("mergeSort({})".format(generateList(s)), setup="from __main__ import mergeSort", number=1))
     print(s)
 
 desenhaGrafico(size, time, "Numbers", "Time")
