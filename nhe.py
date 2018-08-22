@@ -32,47 +32,36 @@ def swap(array, n1, n2):
     array[n1] = array[n2]
     array[n2] = temp
 
-def mergeSort(ul):
-    if len(ul) > 1:
-        mid = len(ul) // 2
+def shellSort(ul):
+    len_ul = len(ul)
+    gap = len_ul//2
+    count = 0
 
-        left_ul = ul[:mid]
-        right_ul = ul[mid:]
-
-        mergeSort(left_ul)
-        mergeSort(right_ul)
-
-        i = 0
-        j = 0
-        k = 0
-
-        while i < len(left_ul) and j < len(right_ul):
-
-            if left_ul[i] < right_ul[j]:
-                ul[k]=left_ul[i]
-                i += 1
-            else:
-                ul[k]=right_ul[j]
-                j += 1
-            k += 1
-
-        while i < len(left_ul):
-
-            ul[k]=left_ul[i]
-            i += 1
-            k += 1
-
-        while j < len(right_ul):
-            ul[k]=right_ul[j]
-            j += 1
-            k += 1
-    return ul
+    while True:
+        if (gap > 0): break
+        for i in range(gap, len_ul):
+            buffer = ul[i]
+            j = i
+            while True:
+                if (j >= gap and ul[j-gap] > buffer): break
+                ul[j] = ul[j-gap]
+                j -= gap
+                count += 1
+            ul[j] = buffer
+        gap = gap // 2
+    return count
 
 size = [1000, 20000, 40000, 60000, 80000, 100000]
 time = []
+counts = []
 
 for s in size:
-    time.append(timeit.timeit("mergeSort({})".format(generateList(s)), setup="from __main__ import mergeSort", number=1))
+    time.append(timeit.timeit("shellSort({})".format(generateList(s)), setup="from __main__ import shellSort", number=1))
     print(s)
 
-desenhaGrafico(size, time, "Numbers", "Time")
+for s in size:
+    counts.append(shellSort(generateList(s)))
+
+print(counts)
+
+desenhaGrafico(size, counts, "Numbers", "Count")
