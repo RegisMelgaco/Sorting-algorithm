@@ -32,25 +32,31 @@ def swap(array, n1, n2):
     array[n1] = array[n2]
     array[n2] = temp
 
-def counting_sort(array):
-    maxval = max(array)
-    n = len(array)
-    m = maxval + 1
-    count = [0] * m
-    for a in array:
-        count[a] += 1
-    i = 0
-    for a in range(m):
-        for c in range(count[a]):
-            array[i] = a
-            i += 1
-    return array
+def radix_sort(ul):
+    len_ul = len(ul)
+    modulus = 10
+    div = 1
+    while True:
+        new_list = [[], [], [], [], [], [], [], [], [], []]
+        for value in ul:
+            least_digit = value % modulus
+            least_digit = least_digit // div
+            new_list[least_digit].append(value)
+        modulus = modulus * 10
+        div = div * 10
+        if len(new_list[0]) == len_ul:
+            return new_list[0]
+        ul = []
+        rd_list_append = ul.append
+        for x in new_list:
+            for y in x:
+                rd_list_append(y)
 
 size = [1000, 20000, 40000, 60000, 80000, 100000]
 time = []
 
 for s in size:
-    time.append(timeit.timeit("counting_sort({})".format(generateList(s)), setup="from __main__ import counting_sort", number=1))
+    time.append(timeit.timeit("radix_sort({})".format(generateList(s)), setup="from __main__ import radix_sort", number=1))
     print(s)
 
 desenhaGrafico(size, [c*172 for c in time], "Numbers", "Times")
