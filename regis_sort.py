@@ -10,7 +10,7 @@ def regis_sort(ul):
     for n in ul:
         bigger.append(n) if n >= average else smaller.append(n)
 
-    recursion = lambda li, len: regis_sort(li) if len > 1 and not len == li.count(li[0]) else li
+    recursion = lambda li, len_li: regis_sort(li) if len_li > 1 and not len_li == li.count(li[0]) else li
 
     bigger = recursion(bigger, len(bigger))
     smaller = recursion(smaller, len(smaller))
