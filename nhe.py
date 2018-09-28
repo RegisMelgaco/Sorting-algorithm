@@ -12,13 +12,7 @@ def desenhaGrafico(x,y,xl = "Entradas", yl = "Saida"):
     plt.xlabel(xl)
     plt.show()  
 
-def generateList(size):
-    list = []
-    while size > 0:
-        n = randint(1, size)
-        list.append(n)
-        size -= 1
-    return list
+generate_ul = lambda size = 30, biggest_number = 20, smallest_number = -20 : [random.randint(smallest_number, biggest_number) for i in range(size)]
 
 def generate_decreasing_list(size):
     list = []
