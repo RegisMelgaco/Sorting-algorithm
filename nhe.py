@@ -12,7 +12,7 @@ def desenhaGrafico(x,y,xl = "Entradas", yl = "Saida"):
     plt.xlabel(xl)
     plt.show()  
 
-generate_ul = lambda size = 30, biggest_number = 20, smallest_number = -20 : [random.randint(smallest_number, biggest_number) for i in range(size)]
+generate_ul = lambda size = 30, biggest_number = 20, smallest_number = -20 : [randint(smallest_number, biggest_number) for i in range(size)]
 
 def generate_decreasing_list(size):
     list = []
@@ -21,42 +21,54 @@ def generate_decreasing_list(size):
         size -= 1
     return list
 
-def swap(array, n1, n2):
-    temp = array[n1]
-    array[n1] = array[n2]
-    array[n2] = temp
+def generateList(s):
+    return [randint(0,10000) for c in range(s)]
 
-def heapify(arr, n, i):
-    largest = i
-    l = 2 * i + 1
-    r = 2 * i + 2 
- 
-    if l < n and arr[i] < arr[l]:
-        largest = l
- 
-    if r < n and arr[largest] < arr[r]:
-        largest = r
+import functools
 
-    if largest != i:
-        arr[i],arr[largest] = arr[largest],arr[i]
-        heapify(arr, n, largest)
+def bucket_sort(ul):
+    largest = max(ul)
+    length = len(ul)
+    size = largest/length
  
-def heapSort(arr):
-    n = len(arr)
+    buckets = [*map(lambda x : [], ul)]
+    for i in range(length):
+        j = int(ul[i]/size)
+        
+        buckets[j].append(ul[i]) if j != length else buckets[length - 1].append(ul[i])            
+ 
+    for i in range(length):
+        quick_sort(buckets[i])
+ 
+    result = []
+    for i in range(length):
+        result = result + buckets[i]
+ 
+    return result
 
-    for i in range(n, -1, -1):
-        heapify(arr, n, i)
-    
-    for i in range(n-1, 0, -1):
-        arr[i], arr[0] = arr[0], arr[i]
-        heapify(arr, i, 0)
+def quick_sort(array=[12,4,5,6,7,3,1,15]):
+    less = []
+    equal = []
+    greater = []
+    if len(array) > 1:
+        pivot = array[0]
+        for x in array:
+            if x < pivot:
+                less.append(x)
+            if x == pivot:
+                equal.append(x)
+            if x > pivot:
+                greater.append(x)
+        return quick_sort(less) + equal + quick_sort(greater)
+    else:
+        return array
 
 
 size = [1000, 20000, 40000, 60000, 80000, 100000]
 time = []
 
 for s in size:
-    time.append(timeit.timeit("heapSort({})".format(generateList(s)), setup="from __main__ import heapSort", number=1))
+    time.append(timeit.timeit("bucket_sort({})".format(generateList(s)), setup="from __main__ import bucket_sort", number=1))
     print(s)
 
 desenhaGrafico(size, [c*172 for c in time], "Numbers", "Times")
